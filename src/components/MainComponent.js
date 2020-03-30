@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import Menu from './MenuComponent';
-import { DISHES } from '../shared/dishes';
 import { View, Platform } from 'react-native';
 import Dishdetail from './DishDetailComponent';
 import { createStackNavigator, createDrawerNavigator } from 'react-navigation';
-import Home from './HoneComponent';
+import Home from './HomeComponent';
+
 const MenuNavigator = createStackNavigator({
     Menu: {
         screen: Menu
