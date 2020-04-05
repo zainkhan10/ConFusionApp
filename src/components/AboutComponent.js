@@ -2,6 +2,15 @@ import React, { Component } from 'react';
 import { Card, ListItem } from 'react-native-elements';
 import { Text, View, ScrollView } from 'react-native';
 import { LEADERS } from '../shared/leaders';
+import { connect } from 'react-redux';
+import { baseUrl } from '../shared/baseUrl';
+import { Loading } from './LoadingComponent';
+
+const mapStateToProps = state => {
+    return {
+        leaders: state.leaders
+    }
+}
 
 function RenderHistory(props) {
     return (
@@ -13,36 +22,55 @@ function RenderHistory(props) {
         </Card>
     );
 }
-class Contact extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            leaders: LEADERS
-        };
-    }
+class About extends Component {
     render() {
-        return (
-            <ScrollView>
-                <View>
-                    <RenderHistory />
-                    <Card title="Corporate Leadership">
-                        {this.state.leaders.map((item, index) => {
-                            return (
-                                <ListItem
-                                    key={index}
-                                    title={item.name}
-                                    subtitle={item.description}
-                                    hideChevron={true}
-                                    leftAvatar={{ source: require('../images/alberto.png') }}
-                                    bottomDivider
-                                >
-                                </ListItem>
-                            );
-                        })}
-                    </Card>
-                </View>
-            </ScrollView>
-        );
+        if (this.props.leaders.isLoading) {
+            return (
+                <ScrollView>
+                    <View>
+                        <RenderHistory />
+                        <Card title="Corporate Leadership">
+                            <Loading />
+                        </Card>
+                    </View>
+                </ScrollView>
+            );
+        } else if (this.props.leaders.isLoading) {
+            return (
+                <ScrollView>
+                    <View>
+                        <RenderHistory />
+                        <Card title="Corporate Leadership">
+                            <Text>{this.props.leaders.errMess}</Text>
+                        </Card>
+                    </View>
+                </ScrollView>
+            );
+        } else {
+            return (
+                <ScrollView>
+                    <View>
+                        <RenderHistory />
+                        <Card title="Corporate Leadership">
+                            {this.props.leaders.leaders.map((item, index) => {
+                                return (
+                                    <ListItem
+                                        key={index}
+                                        title={item.name}
+                                        subtitle={item.description}
+                                        hideChevron={true}
+                                        leftAvatar={{ source: { uri: baseUrl + item.image } }}
+                                        bottomDivider
+                                    >
+                                    </ListItem>
+                                );
+                            })}
+                        </Card>
+                    </View>
+                </ScrollView>
+            );
+        }
+
     }
 }
-export default Contact;
+export default connect(mapStateToProps)(About);

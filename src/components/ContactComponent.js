@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Card } from 'react-native-elements';
 import { Text, View } from 'react-native';
 
-function About() {
+function Contact() {
     return (
         <Card title='Contact Information'>
             <View style={{ margin: 10 }}>
@@ -16,4 +16,4 @@ function About() {
         </Card>
     );
 }
-export default About;
+export default Contact;
