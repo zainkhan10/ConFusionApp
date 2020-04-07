@@ -153,3 +153,7 @@ export const addFavorites = (dishId) => ({
     type: ActionTypes.ADD_FAVORITE,
     payload: dishId
 });
+export const postComments = (comment) => ({
+    type: ActionTypes.POST_COMMENTS,
+    payload: comment
+});

@@ -10,6 +10,7 @@ import { Icon } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { fetchDishes, fetchComments, fetchLeaders, fetchPromos } from '../redux/ActionCreators';
 import Reservation from './ReservationComponent';
+import Favorites from './FavoriteComponent';
 
 const mapStateToProps = state => {
     return {
@@ -116,6 +117,23 @@ const AboutNavigator = createStackNavigator({
         headerLeft: <Icon name="menu" size={24} color="white" onPress={() => navigation.toggleDrawer()} />
     })
 });
+const FavoriteNavigator = createStackNavigator({
+    Favorites: {
+        screen: Favorites
+    }
+}, {
+    navigationOptions: ({ navigation }) => ({
+        title: 'My Favorites',
+        headerStyle: {
+            backgroundColor: '#512DA8'
+        },
+        headerTintColor: '#fff',
+        headerTitleStyle: {
+            color: '#fff'
+        },
+        headerLeft: <Icon name="menu" size={24} color="white" onPress={() => navigation.toggleDrawer()} />
+    })
+});
 
 const CustomDrawerComponent = (props) => (
     <ScrollView>
@@ -164,6 +182,14 @@ const MainNavigator = createDrawerNavigator({
             title: 'Contact',
             drawerLabel: 'Contact',
             drawerIcon: ({ tintColor }) => (<Icon name="address-card" type="font-awesome" size={22} color={tintColor} />)
+        }
+    },
+    Favorites: {
+        screen: FavoriteNavigator,
+        navigationOptions: {
+            title: 'My Favorites',
+            drawerLabel: 'My Favorites',
+            drawerIcon: ({ tintColor }) => (<Icon name="heart" type="font-awesome" size={24} color={tintColor} />)
         }
     },
     Reservation: {
