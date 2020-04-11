@@ -26,7 +26,9 @@ function RenderDish(props) {
     handleViewRef = ref => this.view = ref;
     const recognizeDrag = ({ moveX, moveY, dx, dy }) => {
         if (dx < -200)
-            return true;
+            return 'swipeLeft';
+        else if (dx > 200)
+            return 'swipeRight';
         else
             return false;
     };
@@ -40,7 +42,8 @@ function RenderDish(props) {
             })
         },
         onPanResponderEnd: (e, gestureState) => {
-            if (recognizeDrag(gestureState))
+            console.log('reg ==> ', recognizeDrag(gestureState))
+            if (recognizeDrag(gestureState) === 'swipeLeft') {
                 Alert.alert(
                     'Add to Favorites?',
                     "Are you sure you want to add " + dish.name + " to your favorites?",
@@ -58,6 +61,9 @@ function RenderDish(props) {
                     ],
                     { cancelable: false }
                 )
+            } else if (recognizeDrag(gestureState) === 'swipeRight') {
+                props.toggleModal();
+            }
             return true;
         }
     });
@@ -67,7 +73,7 @@ function RenderDish(props) {
                 animation="fadeInDown"
                 duration={2000}
                 delay={1000}
-                ref={this, handleViewRef}
+                ref={this.handleViewRef}
                 {...panResponder.panHandlers}
             >
                 <Card
