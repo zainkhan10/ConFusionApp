@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
-import { Text, View, ScrollView, StyleSheet, Picker, Switch, Modal, Alert } from 'react-native';
+import { Text, View, ScrollView, StyleSheet, Picker, Switch, Modal, Alert, Platform } from 'react-native';
 import { Card, Button } from 'react-native-elements';
 import DatePicker from 'react-native-datepicker';
 import * as Animatable from 'react-native-animatable';
+import { Notifications } from 'expo';
+import * as Permissions from 'expo-permissions';
+import Constants from 'expo-constants';
 
 class Reservation extends Component {
     constructor(props) {
@@ -20,8 +23,36 @@ class Reservation extends Component {
     resetForm() {
         this.setState({ guest: 1, smoking: false, date: '' })
     }
+    async obtainNotificationPermission() {
+        let permission = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+        if (permission.status !== 'granted') {
+            permission = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+            if (permission.status !== 'granted') {
+                Alert.alert('Permission not granted to show notification');
+            }
+        }
+        return permission;
+    }
+    async presentLocalNotification(date) {
+        await this.obtainNotificationPermission();
+        if (Platform.OS === 'android') {
+            Notifications.createChannelAndroidAsync('chat-messages', {
+                name: 'chat-messages',
+                sound: true,
+                priority: 'max',
+                vibrate: true,
+            });
+        }
+        Notifications.presentLocalNotificationAsync({
+            title: 'Your Reservation',
+            body: 'Reservation for ' + date + ' requested',
+            android: {
+                color: '#512DA8',
+                channelId: 'chat-messages'
+            }
+        })
+    }
     handleReservation() {
-        //console.log(JSON.stringify(this.state))
         Alert.alert(
             'Your Reservation OK?',
             'Number of guests: ' + this.state.guest + '\n' + 'Smoking ?: ' + (this.state.smoking ? 'Yes' : 'No') + '\n' + 'Date & Time: ' + this.state.date,
@@ -33,7 +64,10 @@ class Reservation extends Component {
                 },
                 {
                     text: 'Okay',
-                    onPress: () => this.resetForm(),
+                    onPress: () => {
+                        this.presentLocalNotification(this.state.date);
+                        this.resetForm()
+                    },
                     style: 'default'
                 }
             ],
