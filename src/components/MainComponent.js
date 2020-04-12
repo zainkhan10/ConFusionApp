@@ -11,6 +11,7 @@ import { connect } from 'react-redux';
 import { fetchDishes, fetchComments, fetchLeaders, fetchPromos } from '../redux/ActionCreators';
 import Reservation from './ReservationComponent';
 import Favorites from './FavoriteComponent';
+import Login from './LoginComponent';
 
 const mapStateToProps = state => {
     return {
@@ -32,7 +33,7 @@ const MenuNavigator = createStackNavigator({
     Menu: {
         screen: Menu,
         navigationOptions: ({ navigation }) => ({
-            headerLeft: <Icon name="menu" size={24} color="white" onPress={() => navigation.toggleDrawer()} />
+            headerLeft: <Icon name="menu" containerStyle={{ paddingLeft: 15 }} size={24} color="white" onPress={() => navigation.toggleDrawer()} />
         })
     },
     Dishdetail: {
@@ -63,7 +64,7 @@ const HomeNavigator = createStackNavigator({
         headerTitleStyle: {
             color: '#fff'
         },
-        headerLeft: <Icon name="menu" size={24} color="white" onPress={() => navigation.toggleDrawer()} />
+        headerLeft: <Icon name="menu" containerStyle={{ paddingLeft: 15 }} size={24} color="white" onPress={() => navigation.toggleDrawer()} />
     })
 });
 const ContactNavigator = createStackNavigator({
@@ -80,7 +81,7 @@ const ContactNavigator = createStackNavigator({
         headerTitleStyle: {
             color: '#fff'
         },
-        headerLeft: <Icon name="menu" size={24} color="white" onPress={() => navigation.toggleDrawer()} />
+        headerLeft: <Icon name="menu" containerStyle={{ paddingLeft: 15 }} size={24} color="white" onPress={() => navigation.toggleDrawer()} />
     })
 });
 const ReservationNavigator = createStackNavigator({
@@ -97,7 +98,7 @@ const ReservationNavigator = createStackNavigator({
         headerTitleStyle: {
             color: '#fff'
         },
-        headerLeft: <Icon name="menu" size={24} color="white" onPress={() => navigation.toggleDrawer()} />
+        headerLeft: <Icon name="menu" containerStyle={{ paddingLeft: 15 }} size={24} color="white" onPress={() => navigation.toggleDrawer()} />
     })
 });
 const AboutNavigator = createStackNavigator({
@@ -114,7 +115,7 @@ const AboutNavigator = createStackNavigator({
         headerTitleStyle: {
             color: '#fff'
         },
-        headerLeft: <Icon name="menu" size={24} color="white" onPress={() => navigation.toggleDrawer()} />
+        headerLeft: <Icon name="menu" containerStyle={{ paddingLeft: 15 }} size={24} color="white" onPress={() => navigation.toggleDrawer()} />
     })
 });
 const FavoriteNavigator = createStackNavigator({
@@ -131,7 +132,24 @@ const FavoriteNavigator = createStackNavigator({
         headerTitleStyle: {
             color: '#fff'
         },
-        headerLeft: <Icon name="menu" size={24} color="white" onPress={() => navigation.toggleDrawer()} />
+        headerLeft: <Icon name="menu" containerStyle={{ paddingLeft: 15 }} size={24} color="white" onPress={() => navigation.toggleDrawer()} />
+    })
+});
+const LoginNavigator = createStackNavigator({
+    Login: {
+        screen: Login
+    }
+}, {
+    navigationOptions: ({ navigation }) => ({
+        title: 'Login',
+        headerStyle: {
+            backgroundColor: '#512DA8'
+        },
+        headerTintColor: '#fff',
+        headerTitleStyle: {
+            color: '#fff'
+        },
+        headerLeft: <Icon name="menu" containerStyle={{ paddingLeft: 15 }} size={24} color="white" onPress={() => navigation.toggleDrawer()} />
     })
 });
 
@@ -152,6 +170,14 @@ const CustomDrawerComponent = (props) => (
 );
 
 const MainNavigator = createDrawerNavigator({
+    Login: {
+        screen: LoginNavigator,
+        navigationOptions: {
+            title: 'Login',
+            drawerLabel: 'Login',
+            drawerIcon: ({ tintColor }) => (<Icon name="sign-in" type="font-awesome" size={24} color={tintColor} />)
+        }
+    },
     Home: {
         screen: HomeNavigator,
         navigationOptions: {
@@ -201,9 +227,10 @@ const MainNavigator = createDrawerNavigator({
         }
     }
 }, {
+    initialRouteName: 'Home',
     drawerBackgroundColor: '#D1C4E9',
     contentComponent: CustomDrawerComponent,
-    drawerPostion: 'left'
+    drawerPostion: "left",
 });
 
 
