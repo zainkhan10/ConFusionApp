@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Menu from './MenuComponent';
-import { View, Platform, ScrollView, SafeAreaView, Image, Text, StyleSheet } from 'react-native';
+import { View, Platform, ScrollView, SafeAreaView, Image, Text, StyleSheet, ToastAndroid } from 'react-native';
 import Dishdetail from './DishDetailComponent';
 import { createStackNavigator, createDrawerNavigator, DrawerItems } from 'react-navigation';
 import Home from './HomeComponent';
@@ -12,6 +12,7 @@ import { fetchDishes, fetchComments, fetchLeaders, fetchPromos } from '../redux/
 import Reservation from './ReservationComponent';
 import Favorites from './FavoriteComponent';
 import Login from './LoginComponent';
+import * as NetInfo from "@react-native-community/netinfo";
 
 const mapStateToProps = state => {
     return {
@@ -241,6 +242,47 @@ class Main extends Component {
         this.props.fetchComments();
         this.props.fetchPromos();
         this.props.fetchLeaders();
+        // NetInfo.getConnectionInfo().then((connectionInfo) => {
+        //     ToastAndroid.show('Initital Network Connectivity Type: ' + connectionInfo.type + ', effectiveType: ' + connectionInfo.effectiveType, ToastAndroid.LONG)
+        // });
+        // NetInfo.addEventListener('connectionChange', this.handleConnectivityChange)
+        // const unsubscribe = NetInfo.addEventListener(state => {
+        //     console.log("Connection type", state.type);
+        //     console.log("Is connected?", state.isConnected);
+        // });
+        // unsubscribe();
+        NetInfo.fetch().then(state => {
+            console.log("Connection type", state);
+            this.handleConnectivityChange(state.type)
+            //console.log("Is connected?", state.isConnected);
+        });
+        NetInfo.addEventListener('connectionChange', this.handleConnectivityChange)
+    }
+
+    // componentWillUnmount() {
+    //     NetInfo.removeEventListener('connectionChange', this.handleConnectivityChange)
+    // }
+    handleConnectivityChange = (connectionInfo) => {
+        switch (connectionInfo.type) {
+            case 'none':
+                ToastAndroid.show('You are now offline', ToastAndroid.LONG);
+                break;
+
+            case 'wifi':
+                ToastAndroid.show('You are now connected to WiFi', ToastAndroid.LONG);
+                break;
+
+            case 'cellular':
+                ToastAndroid.show('You are now connected to cellular', ToastAndroid.LONG);
+                break;
+
+            case 'unknown':
+                ToastAndroid.show('You have now an unknown connection', ToastAndroid.LONG);
+                break;
+
+            default:
+                break;
+        }
     }
     render() {
         return (
