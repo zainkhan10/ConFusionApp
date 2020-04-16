@@ -6,6 +6,8 @@ import * as Animatable from 'react-native-animatable';
 import { Notifications } from 'expo';
 import * as Permissions from 'expo-permissions';
 import Constants from 'expo-constants';
+import * as Calendar from 'expo-calendar';
+import moment from 'moment';
 
 class Reservation extends Component {
     constructor(props) {
@@ -52,6 +54,21 @@ class Reservation extends Component {
             }
         })
     }
+    async addCalendarEvent(date) {
+        const takeDate = new Date(date);
+        const addHours = takeDate.setHours(takeDate.getHours() + 2);
+        const { status } = await Permissions.askAsync(Permissions.CALENDAR);
+        if (status === 'granted') {
+            const calendars = await Calendar.getCalendarsAsync();
+            console.log(calendars);
+            let result = await Calendar.createEventAsync(calendars[0].id, {
+                title: 'Con Fusion Table Reservation',
+                startDate: new Date(date),
+                endDate: new Date(addHours),
+            });
+            //console.log(result);
+        }
+    }
     handleReservation() {
         Alert.alert(
             'Your Reservation OK?',
@@ -66,6 +83,7 @@ class Reservation extends Component {
                     text: 'Okay',
                     onPress: () => {
                         this.presentLocalNotification(this.state.date);
+                        this.addCalendarEvent(this.state.date);
                         this.resetForm()
                     },
                     style: 'default'

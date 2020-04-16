@@ -238,6 +238,8 @@ const MainNavigator = createDrawerNavigator({
 
 class Main extends Component {
     componentDidMount() {
+        console.disableYellowBox = true;
+        console.ignoredYellowBox = ['Warning: Each', 'Warning: Failed', 'Switch', 'Switch onTintColor'];
         this.props.fetchDishes();
         this.props.fetchComments();
         this.props.fetchPromos();
